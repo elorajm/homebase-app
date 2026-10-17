@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  owner
+  adult
+  member
+}
+
+enum ChoreStatus {
+  pending
+  completed
+}
+
+model User {
+  id             String           @id @default(cuid())
+  firstName      String
+  lastName       String
+  email          String           @unique
+  passwordHash   String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  sessions       Session[]
+  membership     HouseholdMember?
+  ownedHouseholds Household[]     @relation("HouseholdOwner")
+  createdChores  Chore[]          @relation("ChoreCreator")
+  assignedChores Chore[]          @relation("ChoreAssignee")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Household {
+  id         String            @id @default(cuid())
+  name       String
+  inviteCode String            @unique
+  ownerId    String
+  owner      User              @relation("HouseholdOwner", fields: [ownerId], references: [id])
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  members    HouseholdMember[]
+  chores     Chore[]
+}
+
+model HouseholdMember {
+  id          String    @id @default(cuid())
+  householdId String
+  userId      String    @unique
+  role        Role
+  joinedAt    DateTime  @default(now())
+  household   Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([householdId])
+}
+
+model Chore {
+  id             String      @id @default(cuid())
+  householdId    String
+  title          String
+  description    String?
+  assignedUserId String
+  dueDate        DateTime    @db.Date
+  status         ChoreStatus @default(pending)
+  createdById    String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  household      Household   @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  assignedUser   User        @relation("ChoreAssignee", fields: [assignedUserId], references: [id])
+  createdBy      User        @relation("ChoreCreator", fields: [createdById], references: [id])
+
+  @@index([householdId])
+  @@index([assignedUserId])
+}
