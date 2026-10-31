@@ -10,4 +10,6 @@ export default defineConfig({
   output: 'static',
   adapter: node({ mode: 'standalone' }),
   integrations: [react()],
+  // Sessions live in PostgreSQL (src/lib/server/session.ts), so Astro's built-in session store stays off.
+  session: false,
 });
