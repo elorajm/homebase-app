@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { postJson } from "@/islands/api-client";
+import { postJson, sendJson } from "@/islands/api-client";
 
 function stubFetch(response: Response | Error) {
   const fetchMock = vi.fn(async () => {
@@ -55,6 +55,36 @@ describe("postJson", () => {
     expect(await postJson("/api/auth/login", {})).toEqual({
       ok: false,
       error: "Something went wrong. Please try again.",
+      fieldErrors: {},
+    });
+  });
+});
+
+describe("sendJson", () => {
+  it("sends PATCH with a JSON body", async () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify({ data: { ok: true } }), { status: 200 }));
+    expect(await sendJson("PATCH", "/api/chores/c1/status", { status: "completed" })).toEqual({ ok: true, data: { ok: true } });
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect(url).toBe("/api/chores/c1/status");
+    expect(init.method).toBe("PATCH");
+    expect((init.headers as Record<string, string>)["content-type"]).toBe("application/json");
+    expect(JSON.parse(init.body as string)).toEqual({ status: "completed" });
+  });
+
+  it("sends DELETE without a body or content type", async () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify({ data: { deleted: true } }), { status: 200 }));
+    await sendJson("DELETE", "/api/chores/c1");
+    const [, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect(init.method).toBe("DELETE");
+    expect(init.body).toBeUndefined();
+    expect(init.headers).toBeUndefined();
+  });
+
+  it("returns the server error for a forbidden request", async () => {
+    stubFetch(new Response(JSON.stringify({ error: "You do not have permission to do that." }), { status: 403 }));
+    expect(await sendJson("DELETE", "/api/chores/c1")).toEqual({
+      ok: false,
+      error: "You do not have permission to do that.",
       fieldErrors: {},
     });
   });

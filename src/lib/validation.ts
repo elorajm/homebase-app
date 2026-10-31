@@ -78,3 +78,28 @@ export const choreStatusSchema = z.object({
   choreId: z.string().min(1, "That chore could not be found."),
   status: z.enum(["pending", "completed"], { error: "Choose a valid status." }),
 });
+
+// Chore form input. The assignee is optional: when it is left out, the server assigns the chore
+// to the person creating it (on create) or keeps the current assignee (on edit).
+export const choreFormSchema = z.object({
+  title: requiredText("Chore name", 120),
+  description: z.string().trim().max(1000, "Description must be 1000 characters or fewer."),
+  dueDate: z
+    .string()
+    .min(1, "Due date is required.")
+    .refine(isValidIsoDate, "Enter a valid due date."),
+  assignedUserId: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z
+      .string()
+      .min(1, "Choose a household member to assign this chore to.")
+      .max(64, "Choose a household member to assign this chore to.")
+      .optional(),
+  ),
+});
+
+export const choreStatusInputSchema = z.object({
+  status: z.enum(["pending", "completed"], { error: "Choose a valid status." }),
+});
+
+export const choreIdSchema = z.string().min(1).max(64);

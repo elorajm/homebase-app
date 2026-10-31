@@ -158,6 +158,13 @@ Household visibility rules as built (stricter than Bakeoff 1 on purpose):
 - Other members appear by first and last name and role. Email addresses are not returned to members.
 - Membership is checked on the server for every household endpoint, and a user has at most one household.
 
+Chore rules as built (F3 FR-2 requires an assignee and a due date, so the schema is unchanged):
+
+- Assignment is optional in the form. When no one is chosen, a new chore is assigned to its creator. Edits without an assignee keep the current one. Every chore always has a household member as its assignee.
+- Due dates are required and stored as UTC midnight. A pending chore is overdue after its due date. The server computes this flag.
+- Owners and adults can create, edit, and delete any chore, and can complete any chore. Members can view all chores, and can complete only the chores assigned to them.
+- Every chore query is scoped to the viewer's household. A chore in another household returns the same 404 as a missing one.
+
 Response conventions (same shape as Bakeoff 1's `FormState` so ported tests
 and error UI keep working):
 

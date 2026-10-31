@@ -1,13 +1,11 @@
 ---
 import AppLayout from '../../layouts/AppLayout.astro';
+import { ChoreList } from '../../islands/ChoreList';
 ---
 
 <AppLayout title="Chores">
   <div class="page-header">
     <h1>Chores</h1>
-    <a class="btn btn--primary" href="/chores/new">Add chore</a>
   </div>
-  <div data-island="chore-list">
-    <p class="muted" role="status">Loading chores…</p>
-  </div>
+  <ChoreList client:load />
 </AppLayout>

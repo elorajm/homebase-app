@@ -1,5 +1,6 @@
 ---
 import AppLayout from '../../layouts/AppLayout.astro';
+import { ChoreForm } from '../../islands/ChoreForm';
 ---
 
 <AppLayout title="Add chore">
@@ -8,8 +9,6 @@ import AppLayout from '../../layouts/AppLayout.astro';
   </div>
   <section class="card" aria-labelledby="chore-form-heading">
     <h2 id="chore-form-heading">Chore details</h2>
-    <div data-island="chore-form" data-mode="create">
-      <p class="muted" role="status">Loading form…</p>
-    </div>
+    <ChoreForm mode="create" client:load />
   </section>
 </AppLayout>

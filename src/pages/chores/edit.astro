@@ -1,5 +1,6 @@
 ---
 import AppLayout from '../../layouts/AppLayout.astro';
+import { ChoreForm } from '../../islands/ChoreForm';
 ---
 
 <AppLayout title="Edit chore">
@@ -9,8 +10,6 @@ import AppLayout from '../../layouts/AppLayout.astro';
   <section class="card" aria-labelledby="chore-form-heading">
     <h2 id="chore-form-heading">Chore details</h2>
     <!-- The chore id comes from ?id=, read by the island, so this page stays static. -->
-    <div data-island="chore-form" data-mode="edit">
-      <p class="muted" role="status">Loading chore…</p>
-    </div>
+    <ChoreForm mode="edit" client:load />
   </section>
 </AppLayout>
