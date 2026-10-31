@@ -1,0 +1,14 @@
+---
+import AuthLayout from '../layouts/AuthLayout.astro';
+---
+
+<AuthLayout title="Log in">
+  <section class="card" aria-labelledby="login-heading">
+    <h1 id="login-heading">Log in to HomeBase</h1>
+    <p class="muted">Enter the email and password you registered with.</p>
+    <div data-island="login-form">
+      <p class="muted" role="status">Loading form…</p>
+    </div>
+    <p>New to HomeBase? <a href="/register">Create an account</a></p>
+  </section>
+</AuthLayout>

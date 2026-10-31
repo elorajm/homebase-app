@@ -1,0 +1,14 @@
+---
+import AuthLayout from '../layouts/AuthLayout.astro';
+---
+
+<AuthLayout title="Create account">
+  <section class="card" aria-labelledby="register-heading">
+    <h1 id="register-heading">Create your account</h1>
+    <p class="muted">Passwords must be 8 to 72 characters.</p>
+    <div data-island="register-form">
+      <p class="muted" role="status">Loading form…</p>
+    </div>
+    <p>Already have an account? <a href="/login">Log in</a></p>
+  </section>
+</AuthLayout>

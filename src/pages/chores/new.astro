@@ -1,0 +1,15 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro';
+---
+
+<AppLayout title="Add chore">
+  <div class="page-header">
+    <h1>Add chore</h1>
+  </div>
+  <section class="card" aria-labelledby="chore-form-heading">
+    <h2 id="chore-form-heading">Chore details</h2>
+    <div data-island="chore-form" data-mode="create">
+      <p class="muted" role="status">Loading form…</p>
+    </div>
+  </section>
+</AppLayout>

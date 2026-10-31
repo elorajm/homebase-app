@@ -1,0 +1,16 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro';
+---
+
+<AppLayout title="Edit chore">
+  <div class="page-header">
+    <h1>Edit chore</h1>
+  </div>
+  <section class="card" aria-labelledby="chore-form-heading">
+    <h2 id="chore-form-heading">Chore details</h2>
+    <!-- The chore id comes from ?id=, read by the island, so this page stays static. -->
+    <div data-island="chore-form" data-mode="edit">
+      <p class="muted" role="status">Loading chore…</p>
+    </div>
+  </section>
+</AppLayout>

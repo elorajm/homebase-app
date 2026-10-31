@@ -1,0 +1,24 @@
+# dependencies
+/node_modules
+
+# astro
+/dist/
+/.astro/
+
+# environment and secrets
+.env
+.env*.local
+
+# generated prisma client
+/src/generated/
+
+# testing
+/coverage
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# misc
+*.tsbuildinfo
+.DS_Store
+npm-debug.log*

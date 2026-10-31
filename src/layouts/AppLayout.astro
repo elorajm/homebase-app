@@ -1,0 +1,46 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const { pathname } = Astro.url;
+
+const links = [
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/chores', label: 'Chores' },
+  { href: '/household', label: 'Household' },
+  { href: '/profile', label: 'Profile' },
+];
+
+// Set at build time, so the nav needs no client JavaScript.
+const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+---
+
+<BaseLayout title={title}>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="/dashboard" class="brand">HomeBase</a>
+      <nav aria-label="Primary">
+        <ul class="app-nav__list">
+          {
+            links.map((link) => (
+              <li>
+                <a class="app-nav__link" href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <!-- The UserMenu island mounts here in a later phase. -->
+      <div class="user-bar" data-island="user-menu"></div>
+    </div>
+  </header>
+  <main id="main" class="container page">
+    <slot />
+  </main>
+</BaseLayout>

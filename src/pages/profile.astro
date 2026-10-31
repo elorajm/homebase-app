@@ -1,0 +1,15 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+---
+
+<AppLayout title="Profile">
+  <div class="page-header">
+    <h1>Profile</h1>
+  </div>
+  <section class="card" aria-labelledby="profile-heading">
+    <h2 id="profile-heading">Your details</h2>
+    <div data-island="profile-form">
+      <p class="muted" role="status">Loading your details…</p>
+    </div>
+  </section>
+</AppLayout>
