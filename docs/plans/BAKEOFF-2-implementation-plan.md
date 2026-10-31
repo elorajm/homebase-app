@@ -387,7 +387,10 @@ Bakeoff 2 gets brand-new services:
     - start: `npm run db:deploy && node ./dist/server/entry.mjs`
     - env: `HOST=0.0.0.0` (Render injects `PORT`; the node adapter reads both),
       `NODE_ENV=production` (**required**: enables `Secure` on session cookies),
-      `DATABASE_URL` from the new database
+      `NODE_VERSION=22.23.4` (the runtime the app was built and tested on),
+      `DATABASE_URL` from the new database. No other secrets are needed: sessions
+      are random tokens stored hashed in PostgreSQL, so there is no session secret.
+      The blueprint for these services is `render.astro.yaml`.
     - health check: `/login`
   - `homebase-astro-db` — **new, separate PostgreSQL instance** running the
     same migrations. The two apps never share a database, so Bakeoff 2 cannot

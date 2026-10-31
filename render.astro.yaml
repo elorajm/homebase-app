@@ -1,0 +1,39 @@
+# Bakeoff 2 (Astro) Render blueprint.
+# This file creates NEW services only. The live Bakeoff 1 site is defined by render.yaml on bakeoff-1-nextjs.
+# Do not point the existing Bakeoff 1 Blueprint at this file.
+
+databases:
+  - name: homebase-astro-db
+    databaseName: homebase_astro
+    user: homebase_astro
+    plan: free
+    region: oregon
+    postgresMajorVersion: "17"
+
+services:
+  - type: web
+    name: homebase-astro
+    runtime: node
+    plan: free
+    region: oregon
+    branch: bakeoff-2-astro
+    # --include=dev keeps Prisma's CLI installed even though NODE_ENV=production is set.
+    buildCommand: npm ci --include=dev && npm run build
+    # Migrations run before the server starts. If they fail, the server does not start.
+    startCommand: npm run db:deploy && npm run start
+    healthCheckPath: /login
+    envVars:
+      - key: NODE_VERSION
+        value: 22.23.4
+      # Required: enables the Secure flag on session cookies.
+      - key: NODE_ENV
+        value: production
+      # Render provides PORT. Binding to all interfaces lets Render reach the server.
+      - key: HOST
+        value: 0.0.0.0
+      - key: ASTRO_TELEMETRY_DISABLED
+        value: "1"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: homebase-astro-db
+          property: connectionString
