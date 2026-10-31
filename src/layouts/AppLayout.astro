@@ -1,5 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import { AuthGuard } from '../islands/AuthGuard';
+import { UserMenu } from '../islands/UserMenu';
 
 interface Props {
   title: string;
@@ -36,10 +38,12 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(`${h
           }
         </ul>
       </nav>
-      <!-- The UserMenu island mounts here in a later phase. -->
-      <div class="user-bar" data-island="user-menu"></div>
+      <div class="user-bar">
+        <UserMenu client:idle />
+      </div>
     </div>
   </header>
+  <AuthGuard client:load />
   <main id="main" class="container page">
     <slot />
   </main>

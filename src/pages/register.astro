@@ -1,9 +1,11 @@
 ---
 import AuthLayout from '../layouts/AuthLayout.astro';
 import { RegisterForm } from '../islands/RegisterForm';
+import { AuthGuard } from '../islands/AuthGuard';
 ---
 
 <AuthLayout title="Create account">
+  <AuthGuard mode="guest" client:load />
   <section class="card" aria-labelledby="register-heading">
     <h1 id="register-heading">Create your account</h1>
     <p class="muted">Passwords must be 8 to 72 characters.</p>

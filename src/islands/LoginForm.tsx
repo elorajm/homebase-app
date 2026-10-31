@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { toFieldErrors, type FieldErrors } from "@/lib/field-errors";
 import { VALIDATION_ERROR_MESSAGE } from "@/lib/messages";
+import { safeNextPath } from "@/lib/redirects";
 import { loginSchema } from "@/lib/validation";
 import { postJson } from "@/islands/api-client";
 import { FormMessage, TextField } from "@/islands/form-fields";
@@ -30,7 +31,7 @@ export function LoginForm() {
 
     const result = await postJson("/api/auth/login", parsed.data);
     if (result.ok) {
-      window.location.assign("/dashboard");
+      window.location.assign(safeNextPath(new URLSearchParams(window.location.search).get("next")));
       return;
     }
 
@@ -40,7 +41,8 @@ export function LoginForm() {
   }
 
   return (
-    <form className="stack" noValidate onSubmit={handleSubmit}>
+    // method="post" keeps credentials out of the URL if the form is submitted before hydration finishes.
+    <form className="stack" method="post" noValidate onSubmit={handleSubmit}>
       <FormMessage error={formError} />
       <TextField
         label="Email"

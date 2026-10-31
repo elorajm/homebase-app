@@ -174,7 +174,10 @@ and error UI keep working):
   usable tokens.
 - Cookie `homebase_session`: `httpOnly`, `sameSite: "lax"`, `secure` in
   production, `path: "/"`, 7-day expiry — set via Astro's `context.cookies`
-  instead of `next/headers`.
+  instead of `next/headers`. **Render requirement:** the `Secure` flag is
+  only set when `NODE_ENV=production`, so the Render service must define
+  `NODE_ENV=production`. Without it, production session cookies are not
+  marked `Secure`.
 - `getCurrentUser(context)` hashes the cookie value, looks up the session,
   rejects expired rows. `requireUser` / `requireMembership` become endpoint
   helpers returning 401/403 `Response`s instead of Next.js redirects.
@@ -370,6 +373,7 @@ Bakeoff 2 gets brand-new services:
     - build: `npm ci --include=dev && npm run build` (`build` = `prisma generate && astro build`)
     - start: `npm run db:deploy && node ./dist/server/entry.mjs`
     - env: `HOST=0.0.0.0` (Render injects `PORT`; the node adapter reads both),
+      `NODE_ENV=production` (**required**: enables `Secure` on session cookies),
       `DATABASE_URL` from the new database
     - health check: `/login`
   - `homebase-astro-db` — **new, separate PostgreSQL instance** running the
