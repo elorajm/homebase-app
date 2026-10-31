@@ -6,3 +6,5 @@ export const UNAUTHENTICATED_MESSAGE = "You must be logged in.";
 export const UNSUPPORTED_MEDIA_MESSAGE = "Send the request as JSON (Content-Type: application/json).";
 export const BODY_TOO_LARGE_MESSAGE = "The request is too large.";
 export const INVALID_JSON_MESSAGE = "The request body must be valid JSON.";
+export const ALREADY_IN_HOUSEHOLD_MESSAGE = "You already belong to a household.";
+export const NO_HOUSEHOLD_FOR_CODE_MESSAGE = "No household matches this invite code.";

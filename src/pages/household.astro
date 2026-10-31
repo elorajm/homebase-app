@@ -1,12 +1,12 @@
 ---
 import AppLayout from '../layouts/AppLayout.astro';
+import { HouseholdView } from '../islands/HouseholdView';
 ---
 
 <AppLayout title="Household">
   <div class="page-header">
     <h1>Household</h1>
   </div>
-  <div data-island="household-view">
-    <p class="muted" role="status">Loading your household…</p>
-  </div>
+  <HouseholdView client:load />
 </AppLayout>
+

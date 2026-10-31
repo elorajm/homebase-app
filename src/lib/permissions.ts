@@ -19,3 +19,8 @@ export function canCompleteChore(
 export function canModifyMember(actorRole: HouseholdRole, targetRole: HouseholdRole): boolean {
   return canManageHousehold(actorRole) && targetRole !== "owner";
 }
+
+// Owners and adults can see the invite code so they can invite people. Plain members cannot.
+export function canViewInviteCode(role: HouseholdRole): boolean {
+  return role === "owner" || role === "adult";
+}

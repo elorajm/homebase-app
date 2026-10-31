@@ -1,19 +1,19 @@
 ---
 import AppLayout from '../layouts/AppLayout.astro';
+import { DashboardSummary } from '../islands/DashboardSummary';
 ---
 
 <AppLayout title="Dashboard">
   <div class="page-header">
     <h1>Dashboard</h1>
   </div>
-  <section class="card" aria-labelledby="chores-heading">
-    <h2 id="chores-heading">Open chores</h2>
-    <div data-island="dashboard-summary">
-      <p class="muted" role="status">Loading your household…</p>
-    </div>
+  <section class="card" aria-labelledby="household-heading">
+    <h2 id="household-heading">Your household</h2>
+    <DashboardSummary client:load />
   </section>
   <section class="card placeholder-card" aria-labelledby="later-heading">
     <h2 id="later-heading">Coming later</h2>
-    <p>Shopping lists, household projects, and home maintenance are outside the Bakeoff 2 scope.</p>
+    <p>Chores, shopping lists, household projects, and home maintenance are outside this phase.</p>
   </section>
 </AppLayout>
+

@@ -152,6 +152,12 @@ the F1–F3 feature plans on `master`.
 | `/api/chores/[choreId]` | GET, PATCH, DELETE | Read / update / delete one chore (scoped to household) | yes |
 | `/api/chores/[choreId]/status` | PATCH | Toggle pending/completed | yes |
 
+Household visibility rules as built (stricter than Bakeoff 1 on purpose):
+
+- The invite code is returned only to owners and adults, who can invite people. Plain members never receive it.
+- Other members appear by first and last name and role. Email addresses are not returned to members.
+- Membership is checked on the server for every household endpoint, and a user has at most one household.
+
 Response conventions (same shape as Bakeoff 1's `FormState` so ported tests
 and error UI keep working):
 
