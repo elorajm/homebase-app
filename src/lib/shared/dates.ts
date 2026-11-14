@@ -32,3 +32,22 @@ export function formatDueDate(date: Date): string {
 export function isOverdue(dueDate: Date, status: string, today: Date): boolean {
   return status === "pending" && dueDate.getTime() < today.getTime();
 }
+
+export function formatRelativeTime(isoTimestamp: string, now: Date = new Date()): string {
+  const diffMinutes = Math.round((now.getTime() - new Date(isoTimestamp).getTime()) / 60_000);
+  if (diffMinutes < 1) {
+    return "just now";
+  }
+  if (diffMinutes < 60) {
+    return `${diffMinutes} minute${diffMinutes === 1 ? "" : "s"} ago`;
+  }
+  const hours = Math.round(diffMinutes / 60);
+  if (hours < 24) {
+    return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+  }
+  const days = Math.round(hours / 24);
+  if (days < 7) {
+    return `${days} day${days === 1 ? "" : "s"} ago`;
+  }
+  return formatDueDate(new Date(isoTimestamp));
+}

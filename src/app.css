@@ -466,6 +466,40 @@ a {
   border: 0;
 }
 
+.skeleton {
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    var(--color-border) 25%,
+    var(--color-surface) 50%,
+    var(--color-border) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton--welcome {
+  height: 4.5rem;
+  max-width: 28rem;
+}
+
+.skeleton--stat {
+  height: 5.5rem;
+}
+
+.skeleton--section {
+  height: 16rem;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 @media (min-width: 720px) {
   .site-header__inner {
     flex-direction: row;
@@ -501,5 +535,9 @@ a {
   * {
     scroll-behavior: auto !important;
     transition: none !important;
+  }
+
+  .skeleton {
+    animation: none;
   }
 }
