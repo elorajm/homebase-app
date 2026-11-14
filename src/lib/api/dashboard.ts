@@ -35,9 +35,18 @@ export async function loadDashboard(scenario: DemoScenario = null): Promise<Dash
     };
   }
   const member = currentMember();
-  const household = db.household ?? { id: "", name: "Your household", inviteCode: "", members: [] };
+  // No household membership yet: the API will return nothing household-scoped.
+  if (!member || !db.household) {
+    return {
+      currentMember: null,
+      household: { id: "", name: "Your household", inviteCode: "", members: [] },
+      chores: [],
+      activity: [],
+    };
+  }
+  const household = db.household;
   return {
-    currentMember: member ? { ...member } : null,
+    currentMember: { ...member },
     household: { ...household, members: household.members.map((m) => ({ ...m })) },
     chores: db.chores.map((chore) => ({ ...chore })),
     activity: [...db.activity],

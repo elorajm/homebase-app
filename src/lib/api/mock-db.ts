@@ -13,14 +13,20 @@ import type { ActivityEvent, ActivityType, Chore, Household, Member } from "../s
 export type DemoScenario = "empty" | "error" | "loading" | null;
 
 export interface MockDb {
-  currentUserId: string;
+  /**
+   * The signed-in user (identity only — never a credential). Set by the
+   * mock auth layer; null when logged out.
+   */
+  currentUser: { id: string; firstName: string; lastName: string } | null;
   household: Household | null;
   chores: Chore[];
   activity: ActivityEvent[];
 }
 
+const defaultUser = mockHousehold.members.find((m) => m.id === mockCurrentUserId)!;
+
 export const db: MockDb = {
-  currentUserId: mockCurrentUserId,
+  currentUser: { id: defaultUser.id, firstName: defaultUser.firstName, lastName: defaultUser.lastName },
   household: {
     ...mockHousehold,
     members: mockHousehold.members.map((member) => ({ ...member })),
@@ -50,5 +56,9 @@ export function recordActivity(type: ActivityType, actorName: string, subject: s
 
 /** The signed-in user's member record, or null when they have no household. */
 export function currentMember(): Member | null {
-  return db.household?.members.find((m) => m.id === db.currentUserId) ?? null;
+  const user = db.currentUser;
+  if (!user) {
+    return null;
+  }
+  return db.household?.members.find((m) => m.id === user.id) ?? null;
 }

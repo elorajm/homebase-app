@@ -53,8 +53,12 @@ export async function loadChores(scenario: DemoScenario = null): Promise<ChoresV
     return { currentMember: currentMember(), members: db.household?.members ?? [], chores: [] };
   }
   const member = currentMember();
+  // No household membership yet: nothing household-scoped is returned.
+  if (!member) {
+    return { currentMember: null, members: [], chores: [] };
+  }
   return {
-    currentMember: member ? { ...member } : null,
+    currentMember: { ...member },
     members: (db.household?.members ?? []).map((m) => ({ ...m })),
     chores: db.chores.map((chore) => ({ ...chore })),
   };

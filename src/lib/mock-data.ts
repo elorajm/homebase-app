@@ -26,8 +26,8 @@ const riley: Member = { id: "m-4", firstName: "Riley", lastName: "Okafor", role:
 export const mockCurrentUserId = avery.id;
 
 /**
- * A user with no household yet, used by the ?demo=empty flows: creating a
- * household makes them its owner; joining adds them as a plain member.
+ * A user with no household yet, used to demo the create/join flows: sign in
+ * as them (see mockDemoAccounts) or use /household?demo=empty.
  */
 export const mockGuestUser: Member = {
   id: "m-9",
@@ -35,6 +35,17 @@ export const mockGuestUser: Member = {
   lastName: "Brooks",
   role: "member",
 };
+
+/**
+ * DEMO MODE sign-in accounts. Any non-empty password is accepted; no
+ * passwords exist or are stored anywhere. Replaced by real auth next week.
+ */
+export const mockDemoAccounts: { email: string; user: Member; description: string }[] = [
+  { email: "avery@homebase.demo", user: avery, description: "Household owner" },
+  { email: "jordan@homebase.demo", user: jordan, description: "Adult member" },
+  { email: "sam@homebase.demo", user: sam, description: "Plain member" },
+  { email: "taylor@homebase.demo", user: mockGuestUser, description: "New user, no household" },
+];
 
 export const mockHousehold: Household = {
   id: "h-1",

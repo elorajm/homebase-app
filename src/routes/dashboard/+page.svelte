@@ -171,8 +171,10 @@
 				<p class="muted">{attentionSummary}</p>
 			</div>
 			<div class="welcome__actions">
-				<a class="btn btn--primary" href="/chores/new">Add a chore</a>
-				<a class="btn btn--secondary" href="/chores">View all chores</a>
+				{#if data.currentMember}
+					<a class="btn btn--primary" href="/chores/new">Add a chore</a>
+					<a class="btn btn--secondary" href="/chores">View all chores</a>
+				{/if}
 				<a class="btn btn--secondary" href="/household">Manage household</a>
 			</div>
 		</header>
@@ -188,7 +190,13 @@
 			<p class="message message--error" role="alert">{toggleError}</p>
 		{/if}
 
-		{#if totalCount === 0}
+		{#if data.currentMember === null}
+			<section class="empty-state" aria-labelledby="no-household-heading">
+				<h2 id="no-household-heading">You're not part of a household yet</h2>
+				<p>Create a household or join one with an invite code to start sharing chores.</p>
+				<a class="btn btn--primary" href="/household">Set up your household</a>
+			</section>
+		{:else if totalCount === 0}
 			<section class="empty-state" aria-labelledby="no-chores-heading">
 				<h2 id="no-chores-heading">No chores yet</h2>
 				<p>

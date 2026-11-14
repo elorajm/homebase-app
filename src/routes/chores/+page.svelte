@@ -174,7 +174,13 @@
 			<p class="message message--error" role="alert">{actionError}</p>
 		{/if}
 
-		{#if view.chores.length === 0}
+		{#if view.currentMember === null}
+			<section class="empty-state">
+				<h2>You're not part of a household yet</h2>
+				<p>Chores are shared within a household. Create or join one first.</p>
+				<a class="btn btn--primary" href="/household">Set up your household</a>
+			</section>
+		{:else if view.chores.length === 0}
 			<section class="empty-state">
 				<h2>No chores yet</h2>
 				<p>Chores you add will appear here for the whole household.</p>

@@ -82,6 +82,15 @@ a {
   left: 0.5rem;
 }
 
+.demo-banner {
+  padding: 0.4rem 1rem;
+  background: var(--color-warning-tint);
+  color: var(--color-warning);
+  border-bottom: 1px solid var(--color-warning);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 .container {
   width: min(100% - 2rem, 960px);
   margin-inline: auto;

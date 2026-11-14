@@ -2,7 +2,6 @@
 // mutations enforce the same role rules the GraphQL resolvers will, so the
 // page behaves correctly before the backend exists.
 
-import { mockGuestUser } from "../mock-data";
 import {
   canManageHousehold,
   canModifyMember,
@@ -75,12 +74,17 @@ function generateInviteCode(): string {
   return code;
 }
 
+function requireSignedInUser(): { id: string; firstName: string; lastName: string } {
+  if (!db.currentUser) {
+    throw new Error("You need to be signed in to do that.");
+  }
+  return db.currentUser;
+}
+
 export async function createHousehold(name: string): Promise<Household> {
   await delay();
-  // Until real auth lands, the create/join flows act as the guest user who
-  // has no household yet (reached via /household?demo=empty).
-  const owner: Member = { ...mockGuestUser, role: "owner" };
-  db.currentUserId = owner.id;
+  const user = requireSignedInUser();
+  const owner: Member = { id: user.id, firstName: user.firstName, lastName: user.lastName, role: "owner" };
   db.household = {
     id: generateId("h"),
     name,
@@ -95,16 +99,22 @@ export async function createHousehold(name: string): Promise<Household> {
 
 export async function joinHousehold(inviteCode: string): Promise<Household> {
   await delay();
+  const user = requireSignedInUser();
   if (!db.household || db.household.inviteCode !== inviteCode) {
     throw new Error("No household matches that invite code. Check the code and try again.");
   }
-  const joiner: Member = { ...mockGuestUser, role: "member" };
-  if (!db.household.members.some((m) => m.id === joiner.id)) {
+  if (!db.household.members.some((m) => m.id === user.id)) {
+    const joiner: Member = {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: "member",
+    };
     db.household.members.push(joiner);
+    recordActivity("member_joined", joiner.firstName, db.household.name);
   }
-  db.currentUserId = joiner.id;
-  recordActivity("member_joined", joiner.firstName, db.household.name);
-  return cloneHousehold(db.household, joiner.role);
+  const role = db.household.members.find((m) => m.id === user.id)!.role;
+  return cloneHousehold(db.household, role);
 }
 
 export async function renameHousehold(name: string): Promise<Household> {
